@@ -1,16 +1,16 @@
 package lab4;
 
 public class ArrayAverage {
-    public static float average(int[] list) {
+    public static float average(String[] list) {
         float sum = 0;
-        for (int num : list) {
-            sum += num;
+        for (int i = 0; i < list.length; i++) {
+            sum += Float.parseFloat(list[i]);
         }
         return sum / list.length;
     }
 
     public static void main(String[] args) {
-        int[] list = { 1, 3, 4, 5 };
+        String[] list = { "1", "3", "4", "5" };
         try {
             float average = average(list);
             System.out.println(average);
