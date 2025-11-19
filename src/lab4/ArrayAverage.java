@@ -1,5 +1,7 @@
 package lab4;
 
+import java.util.Scanner;
+
 public class ArrayAverage {
     public static float average(String[] list) {
         float sum = 0;
@@ -10,7 +12,8 @@ public class ArrayAverage {
     }
 
     public static void main(String[] args) {
-        String[] list = { "1", "3", "4", "5" };
+        Scanner scanner = new Scanner(System.in);
+        String[] list = scanner.nextLine().split(" ");
         try {
             float average = average(list);
             System.out.println(average);
