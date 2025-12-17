@@ -1,25 +1,43 @@
 package lab7;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.*;
 
 public class SimpleMax {
     static void main() throws ExecutionException, InterruptedException {
-        int[][] matrix = {{1, 50, 3}, {9, 2, 100}}; // 100
-        ExecutorService executor = Executors.newFixedThreadPool(2);
+        int[][] matrix = {
+                {1, 50, 3},
+                {9, 2, 100},
+                {500, 20, 1},
+                {5, 5, 5}
+        };
 
-        Future<Integer> f1 = executor.submit(() -> {
-            int max = 0;
-            for (int x : matrix[0]) if (x > max) max = x;
-            return max;
-        });
+        int threadCount = Math.min(matrix.length, Runtime.getRuntime().availableProcessors());
+        ExecutorService executor = Executors.newFixedThreadPool(threadCount);
 
-        Future<Integer> f2 = executor.submit(() -> {
-            int max = 0;
-            for (int x : matrix[1]) if (x > max) max = x;
-            return max;
-        });
+        List<Future<Integer>> futures = new ArrayList<>();
 
-        System.out.println("Максимум: " + Math.max(f1.get(), f2.get()));
+        for (int[] row : matrix) {
+            Future<Integer> f = executor.submit(() -> {
+                int maxInRow = Integer.MIN_VALUE;
+                for (int x : row) {
+                    if (x > maxInRow) maxInRow = x;
+                }
+                return maxInRow;
+            });
+            futures.add(f);
+        }
+
+        int globalMax = Integer.MIN_VALUE;
+        for (Future<Integer> f : futures) {
+            int rowMax = f.get();
+            if (rowMax > globalMax) {
+                globalMax = rowMax;
+            }
+        }
+
+        System.out.println("Максимум: " + globalMax);
         executor.shutdown();
     }
 }
