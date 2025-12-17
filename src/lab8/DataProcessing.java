@@ -26,12 +26,13 @@ public class DataProcessing {
         public void loadData(String source) {
             System.out.println("Загрузка из " + source);
             try {
-                this.data = Files.readAllLines(Paths.get("file.txt"));
+                this.data = Files.readAllLines(Paths.get(source));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
 
+        @SuppressWarnings("unchecked")
         public void processData() {
             Future<List<String>> future = executor.submit(() -> {
                 List<String> result = new ArrayList<>(data);
